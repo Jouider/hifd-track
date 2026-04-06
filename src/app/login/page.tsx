@@ -44,21 +44,21 @@ export default function LoginPage() {
         redirect: false,
       });
 
-      if (result?.error) {
+      if (!result) {
+        setError("حدث خطأ غير متوقع");
+        setLoading(false);
+        return;
+      }
+
+      if (result.error) {
         setError("البريد الإلكتروني أو كلمة المرور غير صحيحة");
         setLoading(false);
         return;
       }
 
-      if (result?.ok) {
-        router.push("/dashboard");
-        router.refresh();
-        return;
-      }
-
-      setLoading(false);
-    } catch {
-      setError("حدث خطأ، حاول مرة أخرى");
+      window.location.href = "/dashboard";
+    } catch (err) {
+      setError("حدث خطأ: " + (err instanceof Error ? err.message : "حاول مرة أخرى"));
       setLoading(false);
     }
   }
