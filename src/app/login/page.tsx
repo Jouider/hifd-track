@@ -50,7 +50,13 @@ export default function LoginPage() {
         return;
       }
 
-      router.push("/dashboard");
+      if (result?.ok) {
+        router.push("/dashboard");
+        router.refresh();
+        return;
+      }
+
+      setLoading(false);
     } catch {
       setError("حدث خطأ، حاول مرة أخرى");
       setLoading(false);
