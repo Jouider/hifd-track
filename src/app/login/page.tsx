@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { BookOpen, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const [isRegister, setIsRegister] = useState(false);
@@ -58,44 +59,35 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-primary">حفظ تراك</h1>
-          <p className="text-muted-foreground">احفظ معًا، انمُ معًا</p>
+      <div className="w-full max-w-sm space-y-8">
+        <div className="flex flex-col items-center space-y-3">
+          <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <BookOpen className="w-8 h-8 text-primary" strokeWidth={1.5} />
+          </div>
+          <h1 className="text-2xl font-bold text-primary">حفظ تراك</h1>
+          <p className="text-sm text-muted-foreground">احفظ معا، انمُ معا</p>
         </div>
 
         <Card>
-          <CardHeader className="text-center">
-            <CardTitle>{isRegister ? "إنشاء حساب جديد" : "تسجيل الدخول"}</CardTitle>
-            <CardDescription>
+          <CardHeader className="text-center pb-3">
+            <CardTitle className="text-lg">{isRegister ? "إنشاء حساب جديد" : "تسجيل الدخول"}</CardTitle>
+            <CardDescription className="text-xs">
               {isRegister
-                ? "سجّل حسابك وابدأ تحدي الحفظ"
+                ? "سجل حسابك وابدأ تحدي الحفظ"
                 : "أدخل بياناتك للمتابعة"}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <Button
               variant="outline"
-              className="w-full gap-2"
+              className="w-full h-11 rounded-xl gap-2"
               onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
             >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="currentColor"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
+              <svg className="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
               </svg>
               تسجيل الدخول بـ Google
             </Button>
@@ -104,26 +96,27 @@ export default function LoginPage() {
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">أو</span>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-card px-3 text-muted-foreground">أو</span>
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               {isRegister && (
-                <div className="space-y-2">
-                  <Label htmlFor="name">الاسم</Label>
+                <div className="space-y-1.5">
+                  <Label htmlFor="name" className="text-xs">الاسم</Label>
                   <Input
                     id="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="أدخل اسمك"
                     required={isRegister}
+                    className="h-11 rounded-xl"
                   />
                 </div>
               )}
-              <div className="space-y-2">
-                <Label htmlFor="email">البريد الإلكتروني</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-xs">البريد الإلكتروني</Label>
                 <Input
                   id="email"
                   type="email"
@@ -131,38 +124,39 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="example@email.com"
                   dir="ltr"
-                  className="text-left"
+                  className="text-left h-11 rounded-xl"
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">كلمة المرور</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="password" className="text-xs">كلمة المرور</Label>
                 <Input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="6 أحرف على الأقل"
                   dir="ltr"
-                  className="text-left"
+                  className="text-left h-11 rounded-xl"
                   required
                 />
               </div>
 
               {error && (
-                <p className="text-sm text-destructive text-center">{error}</p>
+                <p className="text-xs text-destructive text-center py-1">{error}</p>
               )}
 
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading
-                  ? "جارٍ المعالجة..."
-                  : isRegister
-                  ? "إنشاء الحساب"
-                  : "تسجيل الدخول"}
+              <Button type="submit" className="w-full h-11 rounded-xl gap-2" disabled={loading}>
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    جارٍ المعالجة...
+                  </>
+                ) : isRegister ? "إنشاء الحساب" : "تسجيل الدخول"}
               </Button>
             </form>
 
-            <p className="text-center text-sm text-muted-foreground">
+            <p className="text-center text-xs text-muted-foreground pt-1">
               {isRegister ? "لديك حساب بالفعل؟" : "ليس لديك حساب؟"}{" "}
               <button
                 onClick={() => {
