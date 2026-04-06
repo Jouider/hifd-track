@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
@@ -33,6 +34,14 @@ export async function POST(req: Request) {
     const user = await db.user.create({
       data: { name, email, password: hashedPassword },
     });
+
+    // Auto-join the main challenge
+    const challenge = await db.challenge.findUnique({ where: { id: "main-challenge" } });
+    if (challenge) {
+      await db.challengeParticipant.create({
+        data: { userId: user.id, challengeId: challenge.id },
+      });
+    }
 
     return NextResponse.json({ user: { id: user.id, name: user.name, email: user.email } });
   } catch {
