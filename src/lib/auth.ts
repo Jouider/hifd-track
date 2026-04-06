@@ -39,6 +39,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  events: {
+    async createUser({ user }) {
+      if (user.id) {
+        const challenge = await db.challenge.findUnique({ where: { id: "main-challenge" } });
+        if (challenge) {
+          await db.challengeParticipant.create({
+            data: { userId: user.id, challengeId: challenge.id },
+          }).catch(() => {});
+        }
+      }
+    },
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
