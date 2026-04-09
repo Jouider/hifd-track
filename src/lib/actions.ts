@@ -168,6 +168,66 @@ export async function getDashboardData() {
   };
 }
 
+export async function updateSurahStatus(surahNumber: number, status: "NOT_STARTED" | "IN_REVISION" | "LEARNED") {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("غير مصرح");
+
+  const now = new Date();
+
+  await db.surahProgress.upsert({
+    where: { userId_surahNumber: { userId: session.user.id, surahNumber } },
+    update: {
+      status,
+      ...(status === "LEARNED" ? { learnedAt: now } : {}),
+    },
+    create: {
+      userId: session.user.id,
+      surahNumber,
+      status,
+      ...(status === "LEARNED" ? { learnedAt: now } : {}),
+    },
+  });
+
+  revalidatePath("/sourates");
+  revalidatePath(`/sourates/${surahNumber}`);
+  revalidatePath("/settings");
+}
+
+export async function addRevision(surahNumber: number) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("غير مصرح");
+
+  const now = new Date();
+
+  await db.surahProgress.upsert({
+    where: { userId_surahNumber: { userId: session.user.id, surahNumber } },
+    update: {
+      revisionCount: { increment: 1 },
+      lastRevisionAt: now,
+      status: "IN_REVISION",
+    },
+    create: {
+      userId: session.user.id,
+      surahNumber,
+      status: "IN_REVISION",
+      revisionCount: 1,
+      lastRevisionAt: now,
+    },
+  });
+
+  revalidatePath("/sourates");
+  revalidatePath(`/sourates/${surahNumber}`);
+}
+
+export async function getSurahProgressForUser() {
+  const session = await auth();
+  if (!session?.user?.id) return [];
+
+  return db.surahProgress.findMany({
+    where: { userId: session.user.id },
+  });
+}
+
 export async function getLeaderboardData() {
   const session = await auth();
   if (!session?.user?.id) return null;

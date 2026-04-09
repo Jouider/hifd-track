@@ -4,13 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Home, Trophy, Target, BookOpen, Settings, LogOut, Menu, X } from "lucide-react";
+import { Home, Trophy, BookOpen, Settings, LogOut, Menu, X, List } from "lucide-react";
 import { useState } from "react";
 
 const navItems = [
   { href: "/dashboard", label: "الرئيسية", icon: Home },
   { href: "/leaderboard", label: "المتصدرون", icon: Trophy },
-  { href: "/challenge", label: "التحدي", icon: Target },
+  { href: "/sourates", label: "السور", icon: List },
   { href: "/review", label: "المراجعة", icon: BookOpen },
 ];
 

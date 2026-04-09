@@ -22,6 +22,7 @@ model User {
   challengeParticipants ChallengeParticipant[]
   dailyLogs             DailyLog[]
   userStats             UserStats[]
+  surahProgress         SurahProgress[]
 }
 
 model Account {
@@ -138,4 +139,26 @@ model UserStats {
   challenge Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, challengeId])
+}
+
+enum SurahStatus {
+  NOT_STARTED
+  IN_REVISION
+  LEARNED
+}
+
+model SurahProgress {
+  id             String      @id @default(cuid())
+  userId         String
+  surahNumber    Int
+  status         SurahStatus @default(NOT_STARTED)
+  revisionCount  Int         @default(0)
+  learnedAt      DateTime?
+  lastRevisionAt DateTime?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, surahNumber])
 }
