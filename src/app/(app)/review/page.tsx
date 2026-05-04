@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, Lightbulb, ClipboardList, Calendar, CheckCircle2 } from "lucide-react";
+import { SurahCameraFilter } from "@/components/surah-camera-filter";
 
 function getReviewSchedule(logDate: Date): { due: Date; label: string }[] {
   const d = new Date(logDate);
@@ -79,6 +80,9 @@ export default async function ReviewPage() {
         <h1 className="text-xl font-bold">المراجعة</h1>
         <p className="text-sm text-muted-foreground">جدول المراجعة المتكررة لتثبيت الحفظ</p>
       </div>
+
+      {/* Camera filter tool */}
+      <SurahCameraFilter />
 
       {/* Tips */}
       <Card>
